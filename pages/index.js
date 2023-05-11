@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
 const DUMMY_MEETUPS = [
@@ -20,7 +21,20 @@ const DUMMY_MEETUPS = [
 ];
 
 function HomePage() {
-  return <MeetupList meetups={DUMMY_MEETUPS} />;
+  const [loadedMeetups, setLoadedMeetups] = useState([]);
+
+  useEffect(() => {
+    //fetchdata
+    // const data = DUMMY_MEETUPS;
+    // console.log(data);
+    setLoadedMeetups(DUMMY_MEETUPS);
+  }, []);
+
+  return <MeetupList meetups={loadedMeetups} />;
+}
+
+export function getStaticProps() {
+  //  thsi function has to be nameed getStaticProps for it to work and has to be declared in the pages files.
 }
 
 export default HomePage;
