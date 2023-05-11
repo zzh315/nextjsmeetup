@@ -20,21 +20,31 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-function HomePage() {
-  const [loadedMeetups, setLoadedMeetups] = useState([]);
+function HomePage(props) {
+  // const [loadedMeetups, setLoadedMeetups] = useState([]);
 
-  useEffect(() => {
-    //fetchdata
-    // const data = DUMMY_MEETUPS;
-    // console.log(data);
-    setLoadedMeetups(DUMMY_MEETUPS);
-  }, []);
+  // useEffect(() => {
+  //   //fetchdata
+  //   // const data = DUMMY_MEETUPS;
+  //   // console.log(data);
+  //   setLoadedMeetups(DUMMY_MEETUPS);
+  // }, []);
 
-  return <MeetupList meetups={loadedMeetups} />;
+  return <MeetupList meetups={props.meetups} />;
 }
 
 export function getStaticProps() {
   //  thsi function has to be nameed getStaticProps for it to work and has to be declared in the pages files.
+  //  this will be excecuted by next in the npm run build process.(which means it won't be updated if theres an update of the database?)
+  // always return an object hrere
+  // fecth code here from real API
+  return {
+    props: { meetups: DUMMY_MEETUPS },
+    revalidate: 10,
+    // unlock increamental static generation, 10 is 10 seconds next will wait untill it regenerate a page for a incoming request
+    // in this case the page will be generated (pre-rendered) again on the server every 10 seconds as long as theres request from user for this page
+    //Static site generation
+  };
 }
 
 export default HomePage;
