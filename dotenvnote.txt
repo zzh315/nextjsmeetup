@@ -1,0 +1,42 @@
+Also, for anyone who might want to incorporate this into their project, these are the steps I took:
+
+https://www.udemy.com/course/react-the-complete-guide-incl-redux/learn/lecture/25616858#questions/18355562
+
+1. create a new .env file at the root level of your project (ie. it should be a sibling file to your package.json in the folder structure)
+
+
+
+2. in that file, create an environment variable that points to your mongodb connection string, something like this:
+
+MONGO_URI='mongodb+srv://<username>:<password>@cluster0.ntrwp.mongodb.net/meetups?retryWrites=true&w=majority'
+
+Just make sure that the <username> and <password> are changed, and angle brackets are removed. Its also important that in order for this to take effect, you need to stop your server and then re-run npm run dev
+
+
+
+3. In order to load the environment variable properly, install a package that will help you manage it -- I used  npm install dotenv for this purpose.
+
+If you are using typescript, you might need to do npm install dotenv @types/dotenv instead (I did this after having some issues, as my project is using typescript).
+
+
+
+4. in the new-meetup.js file, import dotenv functionality:
+
+require("dotenv").config();
+
+
+5. Now just pass that environment variable to the connect method in the same file:
+
+const client = await MongoClient.connect(process.env.MONGO_URI)
+
+Again, if using typescript you might need to force through the variable as your code editor will complain that its not assignable to the correct type. I just fixed this by making sure to implement non-nullish assertion, so I did const client = await MongoClient.connect(process.env.MONGO_URI!)
+
+
+
+6. Finally, and perhaps most important, make sure to add this new .env file to your .gitignore file before pushing to your github repo!
+
+
+
+
+
+I personally had a bit of a difficult time setting all this up, but managed to do it! Hopefully it can help someone out :)
