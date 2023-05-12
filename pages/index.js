@@ -33,17 +33,34 @@ function HomePage(props) {
   return <MeetupList meetups={props.meetups} />;
 }
 
-export function getStaticProps() {
-  //  thsi function has to be nameed getStaticProps for it to work and has to be declared in the pages files.
-  //  this will be excecuted by next in the npm run build process.(which means it won't be updated if theres an update of the database?)
-  // always return an object hrere
-  // fecth code here from real API
+// export function getStaticProps() {
+//   //  thsi function has to be nameed getStaticProps for it to work and has to be declared in the pages files.
+//   //  this will be excecuted by next in the npm run build process.(which means it won't be updated if theres an update of the database?)
+//   // always return an object hrere
+//   // fecth code here from real API
+//without this(aka the useState and useEffect route that fectch data in component), the view source will be rendered without the fecthed data with initial request, becasue react will take over and render with useEffect after component is first loaded
+// better for no authentication or no high frequency update, because a static HTML is created and served on a CDN, and can be cached resued instead of regenerated all the time
+
+//   return {
+//     props: { meetups: DUMMY_MEETUPS },
+//     revalidate: 10,
+//     // unlock increamental static generation, 10 is 10 seconds next will wait untill it regenerate a page for a incoming request
+//     // in this case the page will be generated (pre-rendered) again on the server every 10 seconds as long as theres request from user for this page
+//     //Static site generation
+//   };
+// }
+
+export function getServerSideProps(context) {
+  const req = context.req; // good for authentication and cookie session
+  const res = context.res;
+
+  //fetch data from api
+  //getServerSideProps will not run during the build process but will stay and run on the server(and never on client side) during deployment
+  //  getServerSideProps is a reserved function name for next and allows server fecth new data generate new page with every request
   return {
-    props: { meetups: DUMMY_MEETUPS },
-    revalidate: 10,
-    // unlock increamental static generation, 10 is 10 seconds next will wait untill it regenerate a page for a incoming request
-    // in this case the page will be generated (pre-rendered) again on the server every 10 seconds as long as theres request from user for this page
-    //Static site generation
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
   };
 }
 
