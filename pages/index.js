@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
+
+import { MongoClient } from "mongodb";
 
 const DUMMY_MEETUPS = [
   {
@@ -50,16 +51,33 @@ function HomePage(props) {
 //   };
 // }
 
-export function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   const req = context.req; // good for authentication and cookie session
   const res = context.res;
+
+  const client = await MongoClient.connect(process.env.MONGO_URL);
+  const db = client.db();
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find().toArray();
+  client.close();
+
+  // fetch("/api/meetups"); well no need the extra step as you can get data directly here becuase this is only run on server or build time
 
   //fetch data from api
   //getServerSideProps will not run during the build process but will stay and run on the server(and never on client side) during deployment
   //  getServerSideProps is a reserved function name for next and allows server fecth new data generate new page with every request
   return {
     props: {
-      meetups: DUMMY_MEETUPS,
+      meetups: meetups.map((meetup) => {
+        return {
+          id: meetup._id.toString(),
+          title: meetup.title,
+          image: meetup.image,
+          address: meetup.address,
+          description: meetup.description,
+        };
+      }),
     },
   };
 }

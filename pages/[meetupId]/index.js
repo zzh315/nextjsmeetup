@@ -14,9 +14,9 @@ function MeetupDetails(props) {
 export async function getStaticPaths() {
   // this is required when using getStaticProps on a dynamic page component(eg:[meetupId]).
   // this function returns a object that describe all the params that [meetupId] can have in order to pregenerate them(html) during build.
-  // if a [meetupId] is not listed here, 404 error will be thrown
+  // if a [meetupId] is not listed here, 404 error will be thrown if fallback is set to false
   return {
-    fallback: false,
+    fallback: true,
     //tells next whether path contains all supported params/urls/ids or just some of them. when set to
     //false means contains all supported url and all other params will return 404
     // true means next js will generate page dynamically(ie new server side evaluation instead of being hardcoded here) and support urls not listed here
