@@ -1,5 +1,6 @@
 import NewMeetupForm from "../../components/meetups/NewMeetupForm";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 function NewMeetupPage() {
   const router = useRouter();
@@ -18,7 +19,18 @@ function NewMeetupPage() {
     // push and replace will both navigate to new page, but replace makes you unable to go back
   };
 
-  return <NewMeetupForm onAddMeetup={addMeetupHandler} />;
+  return (
+    <>
+      <Head>
+        <title>Add a new Meetup</title>
+        <meta
+          name="description"
+          content="Add your new meetup and create networking opportunities"
+        />
+      </Head>
+      <NewMeetupForm onAddMeetup={addMeetupHandler} />
+    </>
+  );
 }
 
 export default NewMeetupPage;
