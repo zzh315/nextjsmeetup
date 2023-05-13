@@ -41,7 +41,9 @@ export async function getStaticPaths() {
   // });
   // console.log(meetupIds);
   return {
-    fallback: false,
+    fallback: "blocking",
+    // blocking or true wil generate page on the run and cache the page
+    //blocking user will not see anything before page is generated
     //tells next whether path contains all supported params/urls/ids or just some of them. when set to
     //false means contains all supported url and all other params will return 404
     // true means next js will generate page dynamically(ie new server side evaluation instead of being hardcoded here) and support urls not listed here
